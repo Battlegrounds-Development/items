@@ -1,4 +1,18 @@
-name: BGSItems
+name: ItemsBGS
 version: '1.0-SNAPSHOT'
-main: org.example.Remag501.bGSItems.BGSItems
+main: me.remag501.itemsbgs.ItemsBGS
 api-version: '1.19'
+#authors: [Remag501]
+#description: 'Special items for the battlegrounds server.'
+
+commands:
+  giveitems:
+    description: Gives a special item (molotov or grenade) to the player.
+    usage: /giveitems <molotov|grenade> [amount]
+    permission: molotovgrenades.give
+    permission-message: You do not have permission to use this command.
+
+permissions:
+  molotovgrenades.give:
+    description: Allows users to use the /giveitems command.
+    default: op
