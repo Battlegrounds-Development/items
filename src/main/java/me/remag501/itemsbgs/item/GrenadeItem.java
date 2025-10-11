@@ -12,8 +12,9 @@ import java.util.Arrays;
 
 /**
  * Concrete implementation of the Frag Grenade item.
+ * Extends AbstractTargetingItem to use the scalable Right-Click activation structure.
  */
-public class GrenadeItem implements CustomItem {
+public class GrenadeItem extends AbstractTargetingItem {
 
     private static final String ID = "grenade";
 
@@ -24,6 +25,7 @@ public class GrenadeItem implements CustomItem {
 
     @Override
     public ItemStack getItem(int amount) {
+        // Grenades use COBBLESTONE for their appearance
         ItemStack item = new ItemStack(Material.COBBLESTONE, amount);
         ItemMeta meta = item.getItemMeta();
 
@@ -32,7 +34,7 @@ public class GrenadeItem implements CustomItem {
                 "§7A simple timed explosive that",
                 "§7causes a small, non-destructive blast.",
                 "",
-                "§bDrop to use."
+                "§bRight-click to use." // Consistent with Molotov and new listener
         ));
 
         // The manager handles setting the PersistentDataContainer ID
@@ -40,15 +42,18 @@ public class GrenadeItem implements CustomItem {
         return item;
     }
 
+    /**
+     * Executes the Grenade effect logic after consumption and target validation.
+     * This method is guaranteed to run on a valid target location.
+     */
     @Override
-    public void onActivate(Player activator, Location activationLoc, Plugin plugin) {
+    public void onThrow(Player activator, Location targetLocation, Plugin plugin) {
         activator.sendMessage("§bGrenade thrown!");
 
-        // Play a small explosion sound and particle effect
-        activationLoc.getWorld().playSound(activationLoc, Sound.ENTITY_GENERIC_EXPLODE, 3.0F, 1.5F);
+        // Play a small explosion sound
+        targetLocation.getWorld().playSound(targetLocation, Sound.ENTITY_GENERIC_EXPLODE, 3.0F, 1.5F);
 
-        // Create an explosion that does NOT destroy blocks (setFire: false, breakBlocks: false)
-        // Power of 2 is a small, player-safe explosion.
-        activationLoc.getWorld().createExplosion(activationLoc, 2.0F, false, false);
+        // Create a non-destructive explosion (power 2.0F, setFire: false, breakBlocks: false)
+        targetLocation.getWorld().createExplosion(targetLocation, 2.0F, false, false);
     }
 }

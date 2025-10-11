@@ -1,65 +1,93 @@
 package me.remag501.itemsbgs.listener;
 
+import me.remag501.itemsbgs.ItemsBGS;
 import me.remag501.itemsbgs.item.CustomItem;
+import me.remag501.itemsbgs.item.ProjectileItem;
 import me.remag501.itemsbgs.manager.ItemManager;
+
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.Material;
+
+import java.util.Optional;
 
 /**
- * Handles custom item activation when a player drops an item.
+ * Handles all player interactions (clicks) for custom item activation.
+ * This listener acts as the gatekeeper, deciding whether to activate the item
+ * and managing the item consumption process.
  */
 public class ItemListener implements Listener {
 
-    private final Plugin plugin;
+    private final ItemsBGS plugin;
     private final ItemManager itemManager;
 
-    public ItemListener(Plugin plugin, ItemManager itemManager) {
+    public ItemListener(ItemsBGS plugin, ItemManager itemManager) {
         this.plugin = plugin;
         this.itemManager = itemManager;
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        ItemStack droppedItem = event.getItemDrop().getItemStack();
-        String itemId = itemManager.getCustomItemId(droppedItem);
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        // 1. Filter for a right-click action with an item in hand
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
 
-        if (itemId != null) {
-            // Stop the item entity from spawning and revert inventory change (for control/consumption)
-            event.setCancelled(true);
+        ItemStack heldItem = event.getItem();
+        if (heldItem == null || heldItem.getType() == Material.AIR) {
+            return;
+        }
 
-            CustomItem customItem = itemManager.getItemById(itemId);
-            if (customItem == null) {
-                event.getPlayer().sendMessage("§cError: Custom item logic not found for " + itemId);
+        Player player = event.getPlayer();
+
+        // 2. Identify if the item is a custom item (Correctly chaining ItemManager methods)
+        String customItemId = itemManager.getCustomItemId(heldItem);
+        if (customItemId == null) {
+            return;
+        }
+
+        Optional<CustomItem> customItemOpt = Optional.ofNullable(itemManager.getItemById(customItemId));
+        if (customItemOpt.isEmpty()) {
+            return;
+        }
+
+        CustomItem customItem = customItemOpt.get();
+
+        // Prevent block interaction (like opening doors) when right-clicking with a custom item
+        event.setCancelled(true);
+
+        // 3. Handle Projectile/Targeting Items
+        if (customItem instanceof ProjectileItem projectileItem) {
+
+            // Phase 1: Calculation (Delegate targeting logic to the item)
+            Location activationLoc = projectileItem.getActivationLocation(player);
+
+            // Phase 2: Validation (Listener acts as the gatekeeper)
+            if (activationLoc == null) {
+                player.sendMessage("§cNo valid target found within range!");
                 return;
             }
 
-            Player player = event.getPlayer();
+            // Phase 3: Consumption & Execution (Only if target is valid)
+            ItemStack oneUnitToConsume = heldItem.clone();
+            oneUnitToConsume.setAmount(1);
 
-            // Item consumption and entity manipulation:
-            // This line prevents the item entity from spawning and, based on your findings,
-            // correctly handles the consumption of the item from the inventory.
-            event.getItemDrop().setItemStack(new ItemStack(Material.AIR));
-
-            // Force client update to resolve single-item stack visual bugs
+            // This is the reliable, client-syncing way to consume one item
+            player.getInventory().removeItem(oneUnitToConsume);
             player.updateInventory();
 
-            // Calculate activation location (simulating a throw)
-            Location activationLoc = player.getTargetBlock(null, 10).getLocation().add(0.5, 0.5, 0.5);
+            projectileItem.onThrow(player, activationLoc, plugin);
 
-            // Execute the activation logic after a short delay
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    customItem.onActivate(player, activationLoc, plugin);
-                }
-            }.runTaskLater(plugin, 5L); // 5 ticks delay
+        } else {
+            // 4. Handle Location-Agnostic/Utility Items
+
+            // Utility items don't consume on activation by default; logic is in onActivate()
+            customItem.onActivate(player, plugin);
         }
     }
 }
