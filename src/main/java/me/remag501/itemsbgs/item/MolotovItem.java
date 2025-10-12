@@ -1,6 +1,7 @@
 package me.remag501.itemsbgs.item;
 
 import me.remag501.itemsbgs.ItemsBGS;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,7 +71,13 @@ public class MolotovItem extends AbstractTargetingItem {
         Location eyeLoc = activator.getEyeLocation();
 
         // 1. Create the item to be "thrown"
-        ItemStack torchStack = new ItemStack(Material.REDSTONE_TORCH);
+        ItemStack torchStack = new ItemStack(Material.SPLASH_POTION);
+        // Change color
+        PotionMeta meta = (PotionMeta) torchStack.getItemMeta();
+        if (meta != null) {
+            meta.setColor(Color.ORANGE);
+            torchStack.setItemMeta(meta);
+        }
 
         // 2. Spawn the Item entity
         Item molotovItem = activator.getWorld().dropItem(eyeLoc, torchStack);
