@@ -86,6 +86,6 @@ public class TearGasItem extends AbstractTargetingItem {
 
         // 5. START THE NEW TRACKING TASK
         // The TearGasTracker will spawn the AreaEffectCloud when the item lands.
-        new TearGasTracker(tearGasCanister, plugin).runTaskTimer(plugin, 1L, 1L);
+//        new TearGasTracker(tearGasCanister, plugin).runTaskTimer(plugin, 1L, 1L);
     }
 }

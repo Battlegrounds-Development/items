@@ -118,14 +118,14 @@ public class MolotovItem extends AbstractTargetingItem {
                     fireBlock.setType(Material.FIRE);
 
                     // Schedule the fire to be extinguished
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (fireBlock.getType() == Material.FIRE) {
-                                fireBlock.setType(Material.AIR);
-                            }
-                        }
-                    }.runTaskLater(ItemsBGS.getPlugin(), FIRE_DURATION_TICKS);
+//                    new BukkitRunnable() {
+//                        @Override
+//                        public void run() {
+//                            if (fireBlock.getType() == Material.FIRE) {
+//                                fireBlock.setType(Material.AIR);
+//                            }
+//                        }
+//                    }.runTaskLater(ItemsBGS.getPlugin(), FIRE_DURATION_TICKS);
                 }
             }
         }
