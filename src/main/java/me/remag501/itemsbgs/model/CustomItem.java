@@ -21,7 +21,6 @@ public interface CustomItem {
      * This method is primarily intended for non-projectile utility items (e.g., Riot Shield).
      * Projectile items should use onThrow().
      * @param activator The player who activated the item.
-     * @param plugin The main plugin instance for scheduling tasks.
      */
-    void onActivate(Player activator, Plugin plugin);
+    void onActivate(Player activator);
 }

@@ -58,5 +58,5 @@ public abstract class AbstractTargetingItem implements ProjectileItem {
      * Abstract method required for the projectile execution phase.
      */
     @Override
-    public abstract void onThrow(Player player, Location targetLocation, Plugin plugin);
+    public abstract void onThrow(Player player, Location targetLocation);
 }

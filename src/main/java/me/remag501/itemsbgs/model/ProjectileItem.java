@@ -17,7 +17,7 @@ public interface ProjectileItem extends CustomItem {
      * This uses the two-argument signature required by CustomItem.java.
      */
     @Override
-    default void onActivate(Player activator, Plugin plugin) {
+    default void onActivate(Player activator) {
         // Implementation is deliberately empty. The ItemListener will call onThrow() instead.
     }
 
@@ -36,7 +36,6 @@ public interface ProjectileItem extends CustomItem {
      *
      * @param player The player who activated the item.
      * @param targetLocation The validated target location.
-     * @param plugin The main plugin instance for scheduling tasks.
      */
-    void onThrow(Player player, Location targetLocation, Plugin plugin);
+    void onThrow(Player player, Location targetLocation);
 }
