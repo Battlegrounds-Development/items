@@ -2,10 +2,7 @@ package me.remag501.itemsbgs.item;
 
 import me.remag501.itemsbgs.ItemsBGS;
 import me.remag501.itemsbgs.model.AbstractTargetingItem;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -38,6 +35,12 @@ public class MolotovItem extends AbstractTargetingItem {
     // Define the unique key for the metadata tag
     public static final String METADATA_KEY = "MOLOTOV_PROJECTILE";
 
+    private final Plugin plugin;
+
+    public MolotovItem(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public String getId() {
         return ID;
@@ -64,7 +67,7 @@ public class MolotovItem extends AbstractTargetingItem {
      * Executes the Molotov effect logic after consumption and target validation.
      */
     @Override
-    public void onThrow(Player activator, Location targetLocation, Plugin plugin) {
+    public void onThrow(Player activator, Location targetLocation) {
         activator.sendMessage("§a§l(!) §aMolotov thrown!");
 
         Location eyeLoc = activator.getEyeLocation();
@@ -118,14 +121,14 @@ public class MolotovItem extends AbstractTargetingItem {
                     fireBlock.setType(Material.FIRE);
 
                     // Schedule the fire to be extinguished
-//                    new BukkitRunnable() {
-//                        @Override
-//                        public void run() {
-//                            if (fireBlock.getType() == Material.FIRE) {
-//                                fireBlock.setType(Material.AIR);
-//                            }
-//                        }
-//                    }.runTaskLater(ItemsBGS.getPlugin(), FIRE_DURATION_TICKS);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (fireBlock.getType() == Material.FIRE) {
+                                fireBlock.setType(Material.AIR);
+                            }
+                        }
+                    }.runTaskLater(plugin, FIRE_DURATION_TICKS);
                 }
             }
         }

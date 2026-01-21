@@ -30,6 +30,12 @@ public class TearGasItem extends AbstractTargetingItem {
     public static final double STATIONARY_VELOCITY_THRESHOLD = 0.005; // Velocity threshold for 'stationary'
     public static final int FAILSAFE_DESPAWN_TICKS = 60; // Max flight time before forced activation/despawn (3 seconds)
 
+    private final Plugin plugin;
+
+    public TearGasItem(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public String getId() {
         return ID;
@@ -58,7 +64,7 @@ public class TearGasItem extends AbstractTargetingItem {
      * Launches a custom Item entity that is tracked by TearGasTracker.
      */
     @Override
-    public void onThrow(Player activator, Location targetLocation, Plugin plugin) {
+    public void onThrow(Player activator, Location targetLocation) {
         activator.sendMessage("§a§l(!) §aTear Gas launched!");
         activator.getWorld().playSound(activator.getLocation(), Sound.ENTITY_EGG_THROW, 0.5f, 1.0f); // Throw sound
 
@@ -86,6 +92,6 @@ public class TearGasItem extends AbstractTargetingItem {
 
         // 5. START THE NEW TRACKING TASK
         // The TearGasTracker will spawn the AreaEffectCloud when the item lands.
-//        new TearGasTracker(tearGasCanister, plugin).runTaskTimer(plugin, 1L, 1L);
+        new TearGasTracker(tearGasCanister).runTaskTimer(plugin, 1L, 1L);
     }
 }

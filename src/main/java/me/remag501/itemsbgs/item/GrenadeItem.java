@@ -48,7 +48,7 @@ public class GrenadeItem extends AbstractTargetingItem {
      * This method is guaranteed to run on a valid target location.
      */
     @Override
-    public void onThrow(Player activator, Location targetLocation, Plugin plugin) {
+    public void onThrow(Player activator, Location targetLocation) {
         activator.sendMessage("§bGrenade thrown!");
 
         // Play a small explosion sound

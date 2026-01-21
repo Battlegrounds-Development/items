@@ -28,7 +28,7 @@ public class ItemsBGS extends JavaPlugin {
         getCommand("itemsbgs").setExecutor(new ItemsBGSCommand(itemManager));
 
         // 3. Register the event listener (passing the manager)
-        getServer().getPluginManager().registerEvents(new ItemListener(this, itemManager), this);
+        getServer().getPluginManager().registerEvents(new ItemListener(itemManager), this);
 
         getLogger().info("ItemsBGS has been enabled!");
     }
@@ -38,9 +38,9 @@ public class ItemsBGS extends JavaPlugin {
      * Adding a new item simply requires adding a line here.
      */
     private void registerCustomItems() {
-        itemManager.registerItem(new MolotovItem());
+        itemManager.registerItem(new MolotovItem(this));
+        itemManager.registerItem(new TearGasItem(this));
         itemManager.registerItem(new GrenadeItem());
-        itemManager.registerItem(new TearGasItem());
     }
 
     @Override
