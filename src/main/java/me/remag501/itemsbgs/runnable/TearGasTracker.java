@@ -22,7 +22,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TearGasTracker extends BukkitRunnable {
 
     private final Item item;
-    private final Plugin plugin;
     private int ticksStationary = 0;
 
     // AreaEffectCloud Constants (Moved from TearGasItem for encapsulation)
@@ -44,9 +43,8 @@ public class TearGasTracker extends BukkitRunnable {
     private static final int FAILSAFE_DESPAWN_TICKS = TearGasItem.FAILSAFE_DESPAWN_TICKS;
 
 
-    public TearGasTracker(Item item, Plugin plugin) {
+    public TearGasTracker(Item item) {
         this.item = item;
-        this.plugin = plugin;
     }
 
     @Override

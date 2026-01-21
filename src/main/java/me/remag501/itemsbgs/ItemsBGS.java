@@ -14,12 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class ItemsBGS extends JavaPlugin {
 
-    private static ItemsBGS plugin;
     private ItemManager itemManager;
 
     @Override
     public void onEnable() {
-        plugin = this;
         getLogger().info("ItemsBGS: Initializing Item Manager and registering items.");
 
         // 1. Initialize and register items
@@ -50,10 +48,4 @@ public class ItemsBGS extends JavaPlugin {
         getLogger().info("ItemsBGS has been disabled!");
     }
 
-    /**
-     * Static accessor for the plugin instance, used for NamespacedKey creation.
-     */
-    public static ItemsBGS getPlugin() {
-        return plugin;
-    }
 }

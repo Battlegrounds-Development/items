@@ -19,9 +19,11 @@ public class ItemManager {
     // Key used in PersistentDataContainer to store the item's unique ID
     private final NamespacedKey itemKey;
     private final Map<String, CustomItem> registeredItems = new HashMap<>();
+    private final ItemsBGS plugin;
 
     public ItemManager(ItemsBGS plugin) {
         this.itemKey = new NamespacedKey(plugin, "custom_item_id");
+        this.plugin = plugin;
     }
 
     /**
@@ -30,7 +32,7 @@ public class ItemManager {
      */
     public void registerItem(CustomItem item) {
         registeredItems.put(item.getId(), item);
-        ItemsBGS.getPlugin().getLogger().info("Registered custom item: " + item.getId());
+        plugin.getLogger().info("Registered custom item: " + item.getId());
     }
 
     /**
