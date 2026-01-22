@@ -4,7 +4,7 @@ import me.remag501.itemsbgs.command.ItemsBGSCommand;
 import me.remag501.itemsbgs.item.GrenadeItem;
 import me.remag501.itemsbgs.item.MolotovItem;
 import me.remag501.itemsbgs.item.TearGasItem;
-import me.remag501.itemsbgs.listener.ItemListener;
+//import me.remag501.itemsbgs.listener.ItemListener;
 import me.remag501.itemsbgs.manager.ItemManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,7 +28,8 @@ public class ItemsBGS extends JavaPlugin {
         getCommand("itemsbgs").setExecutor(new ItemsBGSCommand(itemManager));
 
         // 3. Register the event listener (passing the manager)
-        getServer().getPluginManager().registerEvents(new ItemListener(itemManager), this);
+//        getServer().getPluginManager().registerEvents(new ItemListener(itemManager), this);
+        itemManager.registerItemLogic();
 
         getLogger().info("ItemsBGS has been enabled!");
     }

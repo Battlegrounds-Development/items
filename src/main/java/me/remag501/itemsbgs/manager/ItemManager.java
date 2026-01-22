@@ -1,8 +1,15 @@
 package me.remag501.itemsbgs.manager;
 
+import me.remag501.bgscore.BGSCore;
 import me.remag501.itemsbgs.ItemsBGS;
 import me.remag501.itemsbgs.model.CustomItem;
+import me.remag501.itemsbgs.model.ProjectileItem;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -83,4 +90,46 @@ public class ItemManager {
     public Set<String> getRegisteredIds() {
         return registeredItems.keySet();
     }
+
+    public void registerItemLogic() {
+        BGSCore.getInstance().getApi().subscribe(PlayerInteractEvent.class)
+                // 1. Action Filter
+                .filter(e -> e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+                // 2. Item Null Check
+                .filter(e -> e.getItem() != null && e.getItem().getType() != Material.AIR)
+                // 3. Identification Filter (Uses your ItemManager)
+                .filter(e -> getCustomItemId(e.getItem()) != null)
+                // 4. Final Handler (The execution phase)
+                .handler(event -> {
+                    String id = getCustomItemId(event.getItem());
+                    CustomItem item = getItemById(id);
+                    if (item == null) return;
+
+                    event.setCancelled(true);
+                    Player player = event.getPlayer();
+
+                    if (item instanceof ProjectileItem proj) {
+                        handleProjectile(player, proj, event.getItem());
+                    } else {
+                        item.onActivate(player);
+                    }
+                });
+    }
+
+    private void handleProjectile(Player player, ProjectileItem proj, ItemStack held) {
+        Location loc = proj.getActivationLocation(player);
+        if (loc == null) {
+            player.sendMessage("§cNo valid target found within range!");
+            return;
+        }
+
+        // Consumption logic remains the same
+        ItemStack one = held.clone();
+        one.setAmount(1);
+        player.getInventory().removeItem(one);
+        player.updateInventory();
+
+        proj.onThrow(player, loc);
+    }
+
 }
