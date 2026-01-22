@@ -1,20 +1,18 @@
 package me.remag501.itemsbgs.runnable;
 
-import me.remag501.bgscore.api.KeyedTickable; // Your new interface
+import me.remag501.bgscore.BGSCore;
+import me.remag501.bgscore.api.KeyedTickable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
 public class MolotovTracker implements KeyedTickable {
 
     private final Item item;
-    private final Plugin plugin;
     private int ticksStationary = 0;
 
     // Config Constants
@@ -23,21 +21,24 @@ public class MolotovTracker implements KeyedTickable {
     private static final int FIRE_RADIUS = 2;
     private static final int FIRE_DURATION = 60;
 
-    public MolotovTracker(Item item, Plugin plugin) {
+    public MolotovTracker(Item item) {
         this.item = item;
-        this.plugin = plugin;
     }
 
     @Override
-    public UUID getUniqueId() {
+    public UUID getOwnerId() {
         // Link this task to the item entity's UUID
         return item.getUniqueId();
     }
 
     @Override
-    public boolean tick() {
-        // Logic: Return true to stop the task, false to keep ticking
+    public String getTaskType() {
+        // Essential for "The Purge" and debugging
+        return "molotov_tracker";
+    }
 
+    @Override
+    public boolean tick() {
         if (!item.isValid()) {
             return true;
         }
@@ -54,17 +55,17 @@ public class MolotovTracker implements KeyedTickable {
         if (ticksStationary >= PROC_DELAY) {
             if (item.isOnGround() || item.isInWater()) {
                 activate();
-                return true; // Finish task
+                return true;
             }
         }
 
-        // Failsafe
+        // Failsafe (3 seconds)
         if (item.getTicksLived() > 60) {
             activate();
-            return true; // Finish task
+            return true;
         }
 
-        return false; // Continue ticking
+        return false;
     }
 
     private void activate() {
@@ -79,16 +80,12 @@ public class MolotovTracker implements KeyedTickable {
                 if (blockBelow.getType().isSolid() && fireBlock.getType() == Material.AIR) {
                     fireBlock.setType(Material.FIRE);
 
-                    // Note: Delayed tasks like fire removal are still fine
-                    // as simple BukkitRunnables for now.
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (fireBlock.getType() == Material.FIRE) {
-                                fireBlock.setType(Material.AIR);
-                            }
+                    // Using the new Core API for delayed cleanup!
+                    BGSCore.getInstance().getApi().delay(FIRE_DURATION, () -> {
+                        if (fireBlock.getType() == Material.FIRE) {
+                            fireBlock.setType(Material.AIR);
                         }
-                    }.runTaskLater(plugin, FIRE_DURATION);
+                    });
                 }
             }
         }

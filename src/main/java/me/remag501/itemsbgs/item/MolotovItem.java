@@ -72,6 +72,6 @@ public class MolotovItem extends AbstractTargetingItem {
 
         // Industry Standard: Pass the plugin dependency into the new class
 //        new MolotovTracker(molotovItem, plugin).runTaskTimer(plugin, 1L, 1L);
-        BGSCore.getInstance().getHeartbeat().addTask(new MolotovTracker(molotovItem, plugin));
+        BGSCore.getInstance().getApi().addTracker(new MolotovTracker(molotovItem));
     }
 }

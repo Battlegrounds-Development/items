@@ -1,5 +1,6 @@
 package me.remag501.itemsbgs.item;
 
+import me.remag501.bgscore.BGSCore;
 import me.remag501.itemsbgs.model.AbstractTargetingItem;
 import me.remag501.itemsbgs.runnable.TearGasTracker;
 import org.bukkit.Location;
@@ -92,6 +93,6 @@ public class TearGasItem extends AbstractTargetingItem {
 
         // 5. START THE NEW TRACKING TASK
         // The TearGasTracker will spawn the AreaEffectCloud when the item lands.
-        new TearGasTracker(tearGasCanister).runTaskTimer(plugin, 1L, 1L);
+        BGSCore.getInstance().getApi().addTracker(new TearGasTracker(tearGasCanister));
     }
 }
