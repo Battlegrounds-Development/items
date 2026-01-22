@@ -17,3 +17,5 @@ permissions:
   molotovgrenades.give:
     description: Allows users to use the /giveitems command.
     default: op
+
+depend: [BGSCore]
