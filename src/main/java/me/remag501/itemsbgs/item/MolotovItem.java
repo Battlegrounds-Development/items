@@ -1,5 +1,6 @@
 package me.remag501.itemsbgs.item;
 
+import me.remag501.bgscore.BGSCore;
 import me.remag501.itemsbgs.model.AbstractTargetingItem;
 import me.remag501.itemsbgs.runnable.MolotovTracker;
 import org.bukkit.*;
@@ -70,6 +71,7 @@ public class MolotovItem extends AbstractTargetingItem {
         molotovItem.setMetadata(METADATA_KEY, new FixedMetadataValue(plugin, true));
 
         // Industry Standard: Pass the plugin dependency into the new class
-        new MolotovTracker(molotovItem, plugin).runTaskTimer(plugin, 1L, 1L);
+//        new MolotovTracker(molotovItem, plugin).runTaskTimer(plugin, 1L, 1L);
+        BGSCore.getInstance().getHeartbeat().addTask(new MolotovTracker(molotovItem, plugin));
     }
 }
