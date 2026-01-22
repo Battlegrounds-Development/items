@@ -1,5 +1,6 @@
 package me.remag501.itemsbgs;
 
+import me.remag501.bgscore.BGSCore;
 import me.remag501.itemsbgs.command.ItemsBGSCommand;
 import me.remag501.itemsbgs.item.GrenadeItem;
 import me.remag501.itemsbgs.item.MolotovItem;
@@ -25,7 +26,12 @@ public class ItemsBGS extends JavaPlugin {
         registerCustomItems();
 
         // 2. Register command executor (passing the manager)
-        getCommand("itemsbgs").setExecutor(new ItemsBGSCommand(itemManager));
+        ItemsBGSCommand itemsCmd = new ItemsBGSCommand(itemManager);
+        // Register for this plugin command
+        getCommand("itemsbgs").setExecutor(itemsCmd);
+        getCommand("itemsbgs").setTabCompleter(itemsCmd);
+        // Register for core
+        BGSCore.getInstance().getCommandRouter().registerSubcommand("item", itemsCmd);
 
         // 3. Register the event listener (passing the manager)
 //        getServer().getPluginManager().registerEvents(new ItemListener(itemManager), this);
