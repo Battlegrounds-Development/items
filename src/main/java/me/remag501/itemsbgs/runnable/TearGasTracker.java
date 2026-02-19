@@ -1,6 +1,6 @@
 package me.remag501.itemsbgs.runnable;
 
-import me.remag501.bgscore.api.KeyedTickable;
+import me.remag501.bgscore.api.task.KeyedTickable;
 import me.remag501.itemsbgs.item.TearGasItem;
 import org.bukkit.Color;
 import org.bukkit.Location;

@@ -1,11 +1,17 @@
 package me.remag501.itemsbgs;
 
 import me.remag501.bgscore.BGSCore;
+import me.remag501.bgscore.api.BGSApi;
+import me.remag501.bgscore.api.command.CommandService;
+import me.remag501.bgscore.api.event.EventService;
+import me.remag501.bgscore.api.namespace.NamespaceService;
+import me.remag501.bgscore.api.task.TaskService;
 import me.remag501.itemsbgs.command.ItemsBGSCommand;
 import me.remag501.itemsbgs.item.GrenadeItem;
 import me.remag501.itemsbgs.item.MolotovItem;
 import me.remag501.itemsbgs.item.TearGasItem;
 //import me.remag501.itemsbgs.listener.ItemListener;
+import me.remag501.itemsbgs.listener.ItemListener;
 import me.remag501.itemsbgs.manager.ItemManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,26 +22,33 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ItemsBGS extends JavaPlugin {
 
     private ItemManager itemManager;
+    private TaskService taskService;
+    private NamespaceService namespaceService;
 
     @Override
     public void onEnable() {
         getLogger().info("ItemsBGS: Initializing Item Manager and registering items.");
 
-        // 1. Initialize and register items
-        itemManager = new ItemManager(this);
+        // Get services from api
+        EventService eventService = BGSApi.events();
+        taskService = BGSApi.tasks();
+        namespaceService = BGSApi.namespaces();
+        CommandService commandService = BGSApi.commands();
+
+        // Initialize and register items
+        itemManager = new ItemManager(namespaceService);
         registerCustomItems();
 
-        // 2. Register command executor (passing the manager)
+        // Register the event listener (passing the manager)
+        new ItemListener(eventService, itemManager);
+
+        // Register command executor (passing the manager)
         ItemsBGSCommand itemsCmd = new ItemsBGSCommand(itemManager);
+
         // Register for this plugin command
         getCommand("itemsbgs").setExecutor(itemsCmd);
         getCommand("itemsbgs").setTabCompleter(itemsCmd);
-        // Register for core
-        BGSCore.getInstance().getCommandRouter().registerSubcommand("item", itemsCmd);
-
-        // 3. Register the event listener (passing the manager)
-//        getServer().getPluginManager().registerEvents(new ItemListener(itemManager), this);
-        itemManager.registerItemLogic();
+        commandService.registerSubcommand("item", itemsCmd);
 
         getLogger().info("ItemsBGS has been enabled!");
     }
@@ -45,8 +58,8 @@ public class ItemsBGS extends JavaPlugin {
      * Adding a new item simply requires adding a line here.
      */
     private void registerCustomItems() {
-        itemManager.registerItem(new MolotovItem(this));
-        itemManager.registerItem(new TearGasItem(this));
+        itemManager.registerItem(new MolotovItem(taskService, namespaceService));
+        itemManager.registerItem(new TearGasItem(taskService, namespaceService));
         itemManager.registerItem(new GrenadeItem());
     }
 

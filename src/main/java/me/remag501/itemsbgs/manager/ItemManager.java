@@ -1,9 +1,11 @@
 package me.remag501.itemsbgs.manager;
 
 import me.remag501.bgscore.BGSCore;
+import me.remag501.bgscore.api.namespace.NamespaceService;
 import me.remag501.itemsbgs.ItemsBGS;
 import me.remag501.itemsbgs.model.CustomItem;
 import me.remag501.itemsbgs.model.ProjectileItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,11 +28,9 @@ public class ItemManager {
     // Key used in PersistentDataContainer to store the item's unique ID
     private final NamespacedKey itemKey;
     private final Map<String, CustomItem> registeredItems = new HashMap<>();
-    private final ItemsBGS plugin;
 
-    public ItemManager(ItemsBGS plugin) {
-        this.itemKey = new NamespacedKey(plugin, "custom_item_id");
-        this.plugin = plugin;
+    public ItemManager(NamespaceService namespaceService) {
+        this.itemKey = namespaceService.getCustomItemKey();
     }
 
     /**
@@ -39,7 +39,7 @@ public class ItemManager {
      */
     public void registerItem(CustomItem item) {
         registeredItems.put(item.getId(), item);
-        plugin.getLogger().info("Registered custom item: " + item.getId());
+        Bukkit.getLogger().info("[BGSItems] Registered custom item: " + item.getId());
     }
 
     /**
@@ -91,32 +91,7 @@ public class ItemManager {
         return registeredItems.keySet();
     }
 
-    public void registerItemLogic() {
-        BGSCore.getInstance().getApi().subscribe(PlayerInteractEvent.class)
-                // 1. Action Filter
-                .filter(e -> e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
-                // 2. Item Null Check
-                .filter(e -> e.getItem() != null && e.getItem().getType() != Material.AIR)
-                // 3. Identification Filter (Uses your ItemManager)
-                .filter(e -> getCustomItemId(e.getItem()) != null)
-                // 4. Final Handler (The execution phase)
-                .handler(event -> {
-                    String id = getCustomItemId(event.getItem());
-                    CustomItem item = getItemById(id);
-                    if (item == null) return;
-
-                    event.setCancelled(true);
-                    Player player = event.getPlayer();
-
-                    if (item instanceof ProjectileItem proj) {
-                        handleProjectile(player, proj, event.getItem());
-                    } else {
-                        item.onActivate(player);
-                    }
-                });
-    }
-
-    private void handleProjectile(Player player, ProjectileItem proj, ItemStack held) {
+    public void handleProjectile(Player player, ProjectileItem proj, ItemStack held) {
         Location loc = proj.getActivationLocation(player);
         if (loc == null) {
             player.sendMessage("§cNo valid target found within range!");

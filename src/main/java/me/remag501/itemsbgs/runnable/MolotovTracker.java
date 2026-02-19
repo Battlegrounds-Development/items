@@ -1,7 +1,7 @@
 package me.remag501.itemsbgs.runnable;
 
-import me.remag501.bgscore.BGSCore;
-import me.remag501.bgscore.api.KeyedTickable;
+import me.remag501.bgscore.api.task.KeyedTickable;
+import me.remag501.bgscore.api.task.TaskService;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public class MolotovTracker implements KeyedTickable {
 
+    private final TaskService taskService;
     private final Item item;
     private int ticksStationary = 0;
 
@@ -21,7 +22,8 @@ public class MolotovTracker implements KeyedTickable {
     private static final int FIRE_RADIUS = 2;
     private static final int FIRE_DURATION = 60;
 
-    public MolotovTracker(Item item) {
+    public MolotovTracker(TaskService taskService, Item item) {
+        this.taskService = taskService;
         this.item = item;
     }
 
@@ -81,7 +83,7 @@ public class MolotovTracker implements KeyedTickable {
                     fireBlock.setType(Material.FIRE);
 
                     // Using the new Core API for delayed cleanup!
-                    BGSCore.getInstance().getApi().delay(FIRE_DURATION, () -> {
+                    taskService.delay(FIRE_DURATION, () -> {
                         if (fireBlock.getType() == Material.FIRE) {
                             fireBlock.setType(Material.AIR);
                         }

@@ -1,6 +1,7 @@
 package me.remag501.itemsbgs.item;
 
-import me.remag501.bgscore.BGSCore;
+import me.remag501.bgscore.api.namespace.NamespaceService;
+import me.remag501.bgscore.api.task.TaskService;
 import me.remag501.itemsbgs.model.AbstractTargetingItem;
 import me.remag501.itemsbgs.runnable.MolotovTracker;
 import org.bukkit.*;
@@ -10,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
@@ -21,10 +22,13 @@ import java.util.Arrays;
 public class MolotovItem extends AbstractTargetingItem {
 
     public static final String METADATA_KEY = "MOLOTOV_PROJECTILE";
-    private final Plugin plugin;
 
-    public MolotovItem(Plugin plugin) {
-        this.plugin = plugin;
+    private final TaskService taskService;
+    private final NamespaceService namespaceService;
+
+    public MolotovItem(TaskService taskService, NamespaceService namespaceService) {
+        this.taskService = taskService;
+        this.namespaceService = namespaceService;
     }
 
     @Override
@@ -68,10 +72,11 @@ public class MolotovItem extends AbstractTargetingItem {
         velocity.normalize().multiply(1.5).setY(velocity.getY() + 0.3);
         molotovItem.setVelocity(velocity);
 
-        molotovItem.setMetadata(METADATA_KEY, new FixedMetadataValue(plugin, true));
+        // Tag thrown item entity with namespace
+        NamespacedKey key = namespaceService.getCustomItemKey();
+        molotovItem.getPersistentDataContainer().set(key, PersistentDataType.STRING, getId());
 
         // Industry Standard: Pass the plugin dependency into the new class
-//        new MolotovTracker(molotovItem, plugin).runTaskTimer(plugin, 1L, 1L);
-        BGSCore.getInstance().getApi().addTracker(new MolotovTracker(molotovItem));
+        taskService.subscribe(new MolotovTracker(taskService, molotovItem));
     }
 }

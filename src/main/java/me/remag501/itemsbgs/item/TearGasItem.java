@@ -1,17 +1,19 @@
 package me.remag501.itemsbgs.item;
 
-import me.remag501.bgscore.BGSCore;
+import me.remag501.bgscore.api.namespace.NamespaceService;
+import me.remag501.bgscore.api.task.TaskService;
 import me.remag501.itemsbgs.model.AbstractTargetingItem;
 import me.remag501.itemsbgs.runnable.TearGasTracker;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound; // Added for throw sound
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
@@ -31,10 +33,12 @@ public class TearGasItem extends AbstractTargetingItem {
     public static final double STATIONARY_VELOCITY_THRESHOLD = 0.005; // Velocity threshold for 'stationary'
     public static final int FAILSAFE_DESPAWN_TICKS = 60; // Max flight time before forced activation/despawn (3 seconds)
 
-    private final Plugin plugin;
+    private final TaskService taskService;
+    private final NamespaceService namespaceService;
 
-    public TearGasItem(Plugin plugin) {
-        this.plugin = plugin;
+    public TearGasItem(TaskService taskService, NamespaceService namespaceService) {
+        this.taskService = taskService;
+        this.namespaceService = namespaceService;
     }
 
     @Override
@@ -89,10 +93,12 @@ public class TearGasItem extends AbstractTargetingItem {
         tearGasCanister.setVelocity(velocity);
 
         // 4. TAG THE ITEM with metadata
-        tearGasCanister.setMetadata(METADATA_KEY, new FixedMetadataValue(plugin, true));
+        // Get your key from your service
+        NamespacedKey key = namespaceService.getCustomItemKey();
+        tearGasCanister.getPersistentDataContainer().set(key, PersistentDataType.STRING, getId());
 
         // 5. START THE NEW TRACKING TASK
         // The TearGasTracker will spawn the AreaEffectCloud when the item lands.
-        BGSCore.getInstance().getApi().addTracker(new TearGasTracker(tearGasCanister));
+        taskService.subscribe(new TearGasTracker(tearGasCanister));
     }
 }
