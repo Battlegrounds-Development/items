@@ -1,4 +1,4 @@
-package me.remag501.itemsbgs.runnable;
+package me.remag501.item.runnable;
 
 import me.remag501.bgscore.api.task.KeyedTickable;
 import me.remag501.bgscore.api.task.TaskService;

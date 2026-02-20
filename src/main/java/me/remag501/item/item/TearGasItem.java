@@ -1,9 +1,9 @@
-package me.remag501.itemsbgs.item;
+package me.remag501.item.item;
 
 import me.remag501.bgscore.api.namespace.NamespaceService;
 import me.remag501.bgscore.api.task.TaskService;
-import me.remag501.itemsbgs.model.AbstractTargetingItem;
-import me.remag501.itemsbgs.runnable.TearGasTracker;
+import me.remag501.item.model.AbstractTargetingItem;
+import me.remag501.item.runnable.TearGasTracker;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 

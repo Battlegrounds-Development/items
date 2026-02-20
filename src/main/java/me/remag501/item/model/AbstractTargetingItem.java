@@ -1,8 +1,7 @@
-package me.remag501.itemsbgs.model;
+package me.remag501.item.model;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 

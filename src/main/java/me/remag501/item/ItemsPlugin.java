@@ -1,25 +1,24 @@
-package me.remag501.itemsbgs;
+package me.remag501.item;
 
-import me.remag501.bgscore.BGSCore;
 import me.remag501.bgscore.api.BGSApi;
 import me.remag501.bgscore.api.command.CommandService;
 import me.remag501.bgscore.api.event.EventService;
 import me.remag501.bgscore.api.namespace.NamespaceService;
 import me.remag501.bgscore.api.task.TaskService;
-import me.remag501.itemsbgs.command.ItemsBGSCommand;
-import me.remag501.itemsbgs.item.GrenadeItem;
-import me.remag501.itemsbgs.item.MolotovItem;
-import me.remag501.itemsbgs.item.TearGasItem;
+import me.remag501.item.command.ItemsBGSCommand;
+import me.remag501.item.item.GrenadeItem;
+import me.remag501.item.item.MolotovItem;
+import me.remag501.item.item.TearGasItem;
 //import me.remag501.itemsbgs.listener.ItemListener;
-import me.remag501.itemsbgs.listener.ItemListener;
-import me.remag501.itemsbgs.manager.ItemManager;
+import me.remag501.item.listener.ItemListener;
+import me.remag501.item.manager.ItemManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Main class for the ItemsBGS Spigot plugin.
  * Now manages the ItemManager for a scalable item structure.
  */
-public class ItemsBGS extends JavaPlugin {
+public class ItemsPlugin extends JavaPlugin {
 
     private ItemManager itemManager;
     private TaskService taskService;

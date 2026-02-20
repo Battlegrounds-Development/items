@@ -1,9 +1,9 @@
-package me.remag501.itemsbgs.listener;
+package me.remag501.item.listener;
 
 import me.remag501.bgscore.api.event.EventService;
-import me.remag501.itemsbgs.manager.ItemManager;
-import me.remag501.itemsbgs.model.CustomItem;
-import me.remag501.itemsbgs.model.ProjectileItem;
+import me.remag501.item.manager.ItemManager;
+import me.remag501.item.model.CustomItem;
+import me.remag501.item.model.ProjectileItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;

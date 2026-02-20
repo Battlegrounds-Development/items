@@ -1,13 +1,12 @@
-package me.remag501.itemsbgs.item;
+package me.remag501.item.item;
 
-import me.remag501.itemsbgs.model.AbstractTargetingItem;
+import me.remag501.item.model.AbstractTargetingItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 

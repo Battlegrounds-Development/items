@@ -1,6 +1,6 @@
 name: ItemsBGS
 version: '1.0-SNAPSHOT'
-main: me.remag501.itemsbgs.ItemsBGS
+main: me.remag501.item.ItemsPlugin
 api-version: '1.21'
 #authors: [Remag501]
 #description: 'Special items for the battlegrounds server.'

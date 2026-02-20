@@ -1,17 +1,12 @@
-package me.remag501.itemsbgs.manager;
+package me.remag501.item.manager;
 
-import me.remag501.bgscore.BGSCore;
 import me.remag501.bgscore.api.namespace.NamespaceService;
-import me.remag501.itemsbgs.ItemsBGS;
-import me.remag501.itemsbgs.model.CustomItem;
-import me.remag501.itemsbgs.model.ProjectileItem;
+import me.remag501.item.model.CustomItem;
+import me.remag501.item.model.ProjectileItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;

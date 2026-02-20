@@ -1,8 +1,7 @@
-package me.remag501.itemsbgs.model;
+package me.remag501.item.model;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public interface CustomItem {
 

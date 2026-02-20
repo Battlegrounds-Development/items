@@ -1,6 +1,6 @@
-package me.remag501.itemsbgs.command;
+package me.remag501.item.command;
 
-import me.remag501.itemsbgs.manager.ItemManager;
+import me.remag501.item.manager.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

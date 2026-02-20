@@ -1,16 +1,15 @@
-package me.remag501.itemsbgs.item;
+package me.remag501.item.item;
 
 import me.remag501.bgscore.api.namespace.NamespaceService;
 import me.remag501.bgscore.api.task.TaskService;
-import me.remag501.itemsbgs.model.AbstractTargetingItem;
-import me.remag501.itemsbgs.runnable.MolotovTracker;
+import me.remag501.item.model.AbstractTargetingItem;
+import me.remag501.item.runnable.MolotovTracker;
 import org.bukkit.*;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
