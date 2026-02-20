@@ -108,12 +108,12 @@ public class TearGasTracker implements KeyedTickable {
 
         // We use "CONFUSION" for Nausea
         PotionEffect poison = new PotionEffect(PotionEffectType.POISON, EFFECT_DURATION_TICKS, POISON_AMPLIFIER, true, false);
-        PotionEffect nausea = new PotionEffect(PotionEffectType.CONFUSION, EFFECT_DURATION_TICKS, NAUSEA_AMPLIFIER, true, false);
+        PotionEffect nausea = new PotionEffect(PotionEffectType.NAUSEA, EFFECT_DURATION_TICKS, NAUSEA_AMPLIFIER, true, false);
 
         gasCloud.addCustomEffect(poison, true);
         gasCloud.addCustomEffect(nausea, true);
 
-        gasCloud.setParticle(Particle.SMOKE_NORMAL);
+        gasCloud.setParticle(Particle.SMOKE);
         gasCloud.setColor(Color.fromRGB(150, 150, 150));
     }
 }
