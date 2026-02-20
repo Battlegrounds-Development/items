@@ -6,10 +6,10 @@
 
     <groupId>me.Remag501</groupId>
     <artifactId>items</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>ItemsBGS</name>
+    <name>BGSItems</name>
 
     <properties>
         <java.version>21</java.version>
@@ -64,13 +64,11 @@
             <version>1.21.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>me.remag501</groupId>
             <artifactId>bgscore</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

@@ -1,12 +1,10 @@
-name: ItemsBGS
-version: '1.0-SNAPSHOT'
+name: ${project.name}
+version: ${project.version}
+
 main: me.remag501.item.ItemsPlugin
 api-version: '1.21'
-#authors: [Remag501]
-#description: 'Special items for the battlegrounds server.'
 
 commands:
-#  giveitems:
   itemsbgs:
     description: Gives a special item (molotov or grenade) to the player.
     usage: /giveitems <molotov|grenade> [amount]
@@ -18,4 +16,5 @@ permissions:
     description: Allows users to use the /giveitems command.
     default: op
 
-depend: [BGSCore]
+depend:
+  - BGSCore
